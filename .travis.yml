@@ -15,7 +15,7 @@ after_success:
   - docker build -t benkorls/multi-nginx ./nginx
 # Log in to docke hub
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-# Push the built images to docker hub
+# Push the built images to docker hubs
   - docker push benkorls/multi-client
   - docker push benkorls/multi-server
   - docker push benkorls/multi-worker
