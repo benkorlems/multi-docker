@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before-install:
+  - docker build -t benkorls/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run --env CI=true benkorls/react-test npm run test
+
+after_success:
+  - docker build -t benkorls/multi-client ./client
+  - docker build -t benkorls/multi-server ./server
+  - docker build -t benkorls/multi-worker ./worker
+  - docker build -t benkorls/multi-nginx ./nginx
+# Log in to docke hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Push the built images to docker hub
+  - docker push benkorls/multi-client
+  - docker push benkorls/multi-server
+  - docker push benkorls/multi-worker
+  - docker push benkorls/multi-nginx
